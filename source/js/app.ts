@@ -17,11 +17,15 @@ namespace GbMap {
 
   export class Map {
     private gmap: google.maps.Map;
-    private markers: google.maps.Marker[] = [];
+
     constructor(private element: HTMLElement) {
       this.gmap = new google.maps.Map(element, { center: new google.maps.LatLng(30, 0), zoom: 2 });
-
     }
+
+    private markerClick(event: { latLng: google.maps.LatLng }) {
+      console.log(event.latLng.toString());
+    }
+
     init(): void {
       this.getLatLngs().then((locations) => {
         let locs = locations.map((loc) => {
@@ -31,13 +35,16 @@ namespace GbMap {
             position: p
           };
         });
-        this.markers = locs.map((loc) => new google.maps.Marker({
+
+        let bounds = new GbMap.Boxer().getContainingBounds(locs.map((m) => m.position));
+
+        let markers = locs.map((loc) => new google.maps.Marker({
           position: loc.position,
           map: this.gmap,
           title: loc.title
         }));
 
-        let bounds = new GbMap.Boxer().getContainingBounds(this.markers.map((m) => m.getPosition()));
+        markers.forEach((m) => m.addListener("click", this.markerClick.bind(this)));
 
         this.gmap.fitBounds(bounds);
 
@@ -45,12 +52,12 @@ namespace GbMap {
 
         // this.gmap.setZoom()
 
-        new google.maps.Rectangle({
-          bounds: bounds,
-          map: this.gmap,
-          strokeWeight: 1,
-          fillOpacity: 0
-        });
+        // new google.maps.Rectangle({
+        //   bounds: bounds,
+        //   map: this.gmap,
+        //   strokeWeight: 1,
+        //   fillOpacity: 0
+        // });
 
         // new google.maps.Circle({
         //   center: bounds.getCenter(),
@@ -58,13 +65,11 @@ namespace GbMap {
         //   radius: 15 * 1609.34
         // });
 
-        locs.map((loc) => new google.maps.Circle({
-          center: loc.position,
-          map: this.gmap,
-          radius: 15 * 1609.34
-        }));
-
-        console.log(bounds.toString());
+        // locs.map((loc) => new google.maps.Circle({
+        //   center: loc.position,
+        //   map: this.gmap,
+        //   radius: 15 * 1609.34
+        // }));
       });
     }
     /*
