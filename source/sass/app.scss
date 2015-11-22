@@ -1,4 +1,16 @@
 
-#b1 {
-	font-weight: bold;
+section {
+    width: 80%;
+    height: 90%;
+    margin: auto;
+    padding: 10px;
+}
+div#b1 {
+    width: 15%;
+    height: 100%;
+    float: left;
+}
+div#map {
+    margin-left: 15%;
+    height: 100%;
 }
