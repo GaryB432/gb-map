@@ -40,10 +40,10 @@ namespace GbMap {
         let bounds = new GbMap.Boxer().getContainingBounds(this.markers.map((m) => m.getPosition()));
 
         this.gmap.fitBounds(bounds);
-        
-        //this.gmap.panToBounds(bounds);
-        
-        //this.gmap.setZoom()
+
+        // this.gmap.panToBounds(bounds);
+
+        // this.gmap.setZoom()
 
         new google.maps.Rectangle({
           bounds: bounds,
