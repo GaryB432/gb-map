@@ -8,10 +8,10 @@ namespace GbMap {
   }
 
   export class Boxer {
-    getContainingBounds(ls: google.maps.LatLng[] = []): google.maps.LatLngBounds {
-      let b = new google.maps.LatLngBounds();
-      ls.forEach((ll) => b.extend(ll));
-      return b;
+    getContainingBounds(latlngs: google.maps.LatLng[] = []): google.maps.LatLngBounds {
+      let bounds = new google.maps.LatLngBounds();
+      latlngs.forEach((latLng) => bounds.extend(latLng));
+      return bounds;
     }
   }
 
@@ -22,54 +22,27 @@ namespace GbMap {
       this.gmap = new google.maps.Map(element, { center: new google.maps.LatLng(30, 0), zoom: 2 });
     }
 
-    private markerClick(event: { latLng: google.maps.LatLng }) {
-      console.log(event.latLng.toString());
+    private markerClick(loc: ILocation) {
+      console.log(loc);
     }
 
     init(): void {
       this.getLatLngs().then((locations) => {
-        let locs = locations.map((loc) => {
-          let p = new google.maps.LatLng(loc.lat, loc.lng);
-          return {
-            title: `${loc.name} (${p.toString() })`,
-            position: p
-          };
-        });
 
-        let bounds = new GbMap.Boxer().getContainingBounds(locs.map((m) => m.position));
+        let bounds = new google.maps.LatLngBounds();
 
-        let markers = locs.map((loc) => new google.maps.Marker({
-          position: loc.position,
-          map: this.gmap,
-          title: loc.title
-        }));
-
-        markers.forEach((m) => m.addListener("click", this.markerClick.bind(this)));
+        locations.forEach((location) => {
+          let latlng = new google.maps.LatLng(location.lat, location.lng);
+          let marker = new google.maps.Marker({
+            position: latlng,
+            map: this.gmap,
+            title: `${location.name} (${latlng.toString() })`
+          })
+          bounds.extend(latlng);
+          marker.addListener("click", () => this.markerClick(location));
+        })
 
         this.gmap.fitBounds(bounds);
-
-        // this.gmap.panToBounds(bounds);
-
-        // this.gmap.setZoom()
-
-        // new google.maps.Rectangle({
-        //   bounds: bounds,
-        //   map: this.gmap,
-        //   strokeWeight: 1,
-        //   fillOpacity: 0
-        // });
-
-        // new google.maps.Circle({
-        //   center: bounds.getCenter(),
-        //   map: this.gmap,
-        //   radius: 15 * 1609.34
-        // });
-
-        // locs.map((loc) => new google.maps.Circle({
-        //   center: loc.position,
-        //   map: this.gmap,
-        //   radius: 15 * 1609.34
-        // }));
       });
     }
     /*
