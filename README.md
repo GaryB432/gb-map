@@ -1,19 +1,16 @@
-# GbMapMin
-Just a mashup of 
-[Bluebird](https://github.com/petkaantonov/bluebird/),
- [TypeScript](http://typescriptlang.org),
- Jade
+# gb-map
 
-### Getting started
+## Fetch dependencies
+```
+npm install
+```
 
-From the command line in your project directory
+## Run Webpack
+```
+npm run build
+```
 
-- npm install
-- bower install
-- tsd reinstall -so
-- gulp
-
-From separate command windows
-- npm start
-- gulp watch
-- tsc -p source -w
+## Start http-server
+```
+npm start
+```

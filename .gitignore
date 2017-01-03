@@ -1,6 +1,3 @@
-node_modules/
-bower_components/
-app/
-typings/
-test/specs.js
-test/specs.js.map
+node_modules
+coverage
+dist
